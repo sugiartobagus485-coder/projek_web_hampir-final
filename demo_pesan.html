@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Generator Pesan - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+    <ul class="Login"><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="katalog-head">
+        <div>
+            <h2>📱 Demo Generator Pesan WhatsApp</h2>
+            <p>Otomatisasi pesan personal untuk banyak orang sekaligus.</p>
+        </div>
+        <a href="katalog.html" class="tombol-keranjang">← Kembali</a>
+    </div>
+
+    <div id="notif"></div>
+
+    <div class="kartu-form">
+        <h3>1. Template Pesan</h3>
+        <p style="font-size:13px;color:#666;margin-top:-6px;margin-bottom:14px;">
+            Gunakan <b>{nama}</b> sebagai placeholder. Contoh:
+            <i>"Halo {nama}, promo spesial hari ini!"</i>
+        </p>
+        <textarea id="templatePesan" rows="4">Halo {nama}! 🎉
+Kamu dapat diskon spesial hari ini. Buruan sebelum habis!</textarea>
+    </div>
+
+    <div class="kartu-form">
+        <h3>2. Daftar Nama</h3>
+        <p style="font-size:13px;color:#666;margin-top:-6px;margin-bottom:14px;">
+            Satu nama per baris. Bisa paste dari Excel.
+        </p>
+        <textarea id="daftarNama" rows="8">Budi Santoso
+Siti Rahayu
+Andi Wijaya
+Dewi Lestari
+Rizki Pratama</textarea>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+        <button id="tombolGenerate" class="btn-login"
+                style="width:auto;padding:13px 24px;">
+            ✨ Generate Pesan
+        </button>
+        <a href="demo_bot.html" class="btn-kecil"
+           style="display:inline-block;padding:13px 24px;">
+            🤖 Coba Demo Bot →
+        </a>
+    </div>
+
+    <div id="areaHasil" style="display:none;">
+        <h3 class="judul-bagian">Hasil Pesan</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>NO</th><th>NAMA</th><th>PESAN</th></tr>
+                </thead>
+                <tbody id="isiHasil"></tbody>
+            </table>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <button id="tombolSalin" class="btn-kecil">📋 Salin Semua</button>
+            <button id="tombolUnduh" class="btn-kecil">⬇️ Unduh .txt</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    const tombolGenerate = document.getElementById("tombolGenerate");
+    const tombolSalin    = document.getElementById("tombolSalin");
+    const tombolUnduh   = document.getElementById("tombolUnduh");
+    let hasilTerakhir    = [];
+
+    tombolGenerate.addEventListener("click", function () {
+        const template = document.getElementById("templatePesan").value;
+        const nama    = document.getElementById("daftarNama").value
+                            .split("\n")
+                            .map(function (n) { return n.trim(); })
+                            .filter(function (n) { return n !== ""; });
+
+        if (nama.length === 0) {
+            tampilkanNotif("Isi daftar nama dulu ya!", "error");
+            return;
+        }
+
+        hasilTerakhir = nama.map(function (n) {
+            return {
+                nama: n,
+                pesan: template.split("{nama}").join(n)
+            };
+        });
+
+        const isi = document.getElementById("isiHasil");
+        isi.innerHTML = "";
+
+        hasilTerakhir.forEach(function (h, i) {
+            const baris = document.createElement("tr");
+            baris.innerHTML =
+                '<td class="bold">' + (i + 1) + "</td>" +
+                '<td class="bold">' + aman(h.nama) + "</td>" +
+                "<td>" + aman(h.pesan) + "</td>";
+            isi.appendChild(baris);
+        });
+
+        document.getElementById("areaHasil").style.display = "block";
+        document.getElementById("areaHasil")
+            .scrollIntoView({ behavior: "smooth" });
+    });
+
+    tombolSalin.addEventListener("click", function () {
+        if (hasilTerakhir.length === 0) return;
+        const teks = hasilTerakhir
+            .map(function (h) { return h.pesan; })
+            .join("\n\n---\n\n");
+        navigator.clipboard.writeText(teks).then(function () {
+            tombolSalin.innerText = "✓ Tersalin";
+            setTimeout(function () { tombolSalin.innerText = "📋 Salin Semua"; }, 1500);
+        });
+    });
+
+    tombolUnduh.addEventListener("click", function () {
+        if (hasilTerakhir.length === 0) return;
+        const teks = hasilTerakhir
+            .map(function (h) { return h.pesan; })
+            .join("\n\n---\n\n");
+        const blob = new Blob([teks], { type: "text/plain" });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement("a");
+        a.href     = url;
+        a.download = "pesan_whatsapp.txt";
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+</script>
+
+</body>
+</html>

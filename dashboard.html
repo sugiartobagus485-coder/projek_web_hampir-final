@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+    <ul class="Login"><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="kepala">
+        <div>
+            <span class="lencana">Akun Saya</span>
+            <h2 id="namaUser">Halo 🎮</h2>
+            <p id="emailUser"></p>
+        </div>
+        <a class="btn-login" href="katalog.html"
+           style="width:auto;padding:12px 22px;text-decoration:none;">
+            Belanja Sekarang
+        </a>
+    </div>
+
+    <div class="kartu-statistik">
+        <div class="kartu">
+            <h3>Pesanan Saya</h3>
+            <div class="angka" id="jumlahPesanan">0</div>
+        </div>
+        <div class="kartu">
+            <h3>Total Belanja</h3>
+            <div class="angka" id="totalBelanja" style="font-size:24px;">Rp 0</div>
+        </div>
+    </div>
+
+    <h3 class="judul-bagian">Riwayat Pesanan</h3>
+    <div id="tempatPesanan"></div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // Halaman ini khusus user yang sudah login
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        kunciUser();
+
+        document.getElementById("namaUser").innerText =
+            "Halo, " + infoAkun.nama + " 🎮";
+        document.getElementById("emailUser").innerText =
+            "Email: " + (infoAkun.email || "-");
+
+        try {
+            const hasil = await api("api_pesanan.php");
+
+            if (hasil.status !== "success") {
+                document.getElementById("tempatPesanan").innerHTML =
+                    '<div class="kotak-kosong"><p>' +
+                    (hasil.message || "Belum ada pesanan.") +
+                    "</p></div>";
+                return;
+            }
+
+            const daftar = hasil.pesanan;
+            document.getElementById("jumlahPesanan").innerText = daftar.length;
+
+            // Hitung total belanja (pesanan dibatalkan tidak dihitung)
+            let total = 0;
+            daftar.forEach(function (p) {
+                if (p.status !== "Dibatalkan") total += p.total;
+            });
+            document.getElementById("totalBelanja").innerText = rupiah(total);
+
+            const tempat = document.getElementById("tempatPesanan");
+
+            if (daftar.length === 0) {
+                tempat.innerHTML =
+                    '<div class="kotak-kosong"><p>Kamu belum punya pesanan. ' +
+                    'Yuk lihat <a href="katalog.html">Katalog</a> dulu!</p></div>';
+                return;
+            }
+
+            let html =
+                '<div class="table-container"><table>' +
+                "<thead><tr>" +
+                "<th>NO</th><th>ISI PESANAN</th>" +
+                "<th>TOTAL</th><th>STATUS</th><th>TANGGAL</th>" +
+                "</tr></thead><tbody>";
+
+            daftar.forEach(function (p) {
+                const isi = p.isi.map(function (item) {
+                    return item.nama + " (" + item.qty + "x)";
+                }).join(", ");
+
+                html += '<tr class="baris-bisa-klik" data-id="' + p.id + '" ' +
+                        'style="cursor:pointer;">' +
+                    '<td class="bold">#' + p.id + " ▼</td>" +
+                    "<td>" + aman(isi) + "</td>" +
+                    '<td class="bold">' + rupiah(p.total) + "</td>" +
+                    '<td><span class="badge ' + lencanaStatus(p.status) + '">' +
+                        aman(p.status) + "</span></td>" +
+                    "<td>" + aman(p.tanggal) + "</td>" +
+                "</tr>";
+
+                // Baris detail (disembunyikan dulu, buka dengan klik)
+                let detail = '<ul class="daftar-item">';
+                p.isi.forEach(function (item) {
+                    detail += "<li>" + aman(item.nama) + " &times; " + item.qty +
+                              " <span>= " + rupiah(item.harga * item.qty) +
+                              "</span></li>";
+                });
+                detail += "</ul>";
+                if (p.catatan) {
+                    detail += "<p style='font-size:13px;color:#555;margin-bottom:6px;'>" +
+                              "<b>Catatan:</b> " + aman(p.catatan) + "</p>";
+                }
+                detail += '<a class="btn-beli" style="display:inline-block;" ' +
+                          'href="https://wa.me/' + (infoAkun.no_wa || "6281234567890") +
+                          '?text=' + encodeURIComponent("Halo, tanya soal pesanan #" + p.id) +
+                          '" target="_blank" rel="noopener">Chat Admin</a>';
+
+                html += '<tr class="baris-detail-isi" data-id="' + p.id + '" ' +
+                        'style="display:none;"><td></td><td colspan="4">' +
+                        detail + "</td></tr>";
+            });
+
+            html += "</tbody></table></div>";
+
+            html += '<p class="lihat-semua">Ada yang mau ditanyakan? ' +
+                    '<a href="https://wa.me/' + (infoAkun.no_wa || "6281234567890") +
+                    '" target="_blank" rel="noopener">' +
+                    "Chat Admin via WhatsApp</a></p>";
+
+            tempat.innerHTML = html;
+
+            // Pasang aksi klik untuk buka/tutup detail pesanan
+            tempat.querySelectorAll(".baris-bisa-klik").forEach(function (baris) {
+                baris.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                    const detail = tempat.querySelector(
+                        '.baris-detail-isi[data-id="' + id + '"]'
+                    );
+                    if (!detail) return;
+                    const terbuka = detail.style.display !== "none";
+                    detail.style.display = terbuka ? "none" : "table-row";
+                    this.querySelector("td").innerHTML =
+                        this.querySelector("td").innerHTML
+                            .replace(/[▼▲]/, terbuka ? "▼" : "▲");
+                });
+            });
+
+        } catch (e) {
+            console.error(e);
+            document.getElementById("tempatPesanan").innerHTML =
+                '<div class="kotak-kosong"><p>Tidak bisa memuat pesanan. ' +
+                "Cek XAMPP!</p></div>";
+        }
+    });
+</script>
+
+</body>
+</html>

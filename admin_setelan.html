@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan - GameDev Admin</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav class="nav-admin">
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span> Admin</div>
+    <ul class="PepekNav">
+      <li><a href="admin.html">Ringkasan <span id="lencanaNotif" class="lencana-notif" style="display:none;"></span></a></li>
+      <li><a href="admin_produk.html">Kelola Produk</a></li>
+      <li><a href="admin_pesanan.html">Pesanan</a></li>
+      <li><a href="admin_setelan.html">Pengaturan</a></li>
+    </ul>
+    <ul class="Login"><li><a href="katalog.html">Lihat Toko</a></li><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="kepala">
+        <div>
+            <span class="lencana">Dashboard Admin</span>
+            <h2>Pengaturan</h2>
+            <p>Atur nomor WhatsApp tokomu dan ganti sandi admin.</p>
+        </div>
+    </div>
+
+    <div id="notif"></div>
+
+    <div class="kartu-form">
+        <h3>📱 Kontak Toko</h3>
+
+        <form id="formSetelan">
+            <div class="input-group">
+                <label for="no_wa">Nomor WhatsApp Admin</label>
+                <input type="text" id="no_wa"
+                       placeholder="Contoh: 081234567890" required>
+                <small style="font-size:12px;color:#666;">
+                    Dipakai untuk tombol Beli & semua link WhatsApp.
+                    Boleh pakai 08xx atau 628xx.
+                </small>
+            </div>
+
+            <div class="input-group">
+                <label for="admin_user">Username Admin</label>
+                <input type="text" id="admin_user" required>
+            </div>
+
+            <span id="pesanSetelan"></span>
+
+            <button type="submit" class="btn-login" id="tombolSetelan">
+                Simpan Kontak
+            </button>
+        </form>
+    </div>
+
+    <div class="kartu-form">
+        <h3>🔒 Ganti Password Admin</h3>
+        <p style="font-size:13px;color:#666;margin-top:-6px;margin-bottom:14px;">
+            Kosongkan kalau tidak mau mengganti password.
+        </p>
+
+        <form id="formPassword">
+            <div class="input-group">
+                <label for="pass_lama">Password Lama</label>
+                <input type="password" id="pass_lama"
+                       placeholder="Password sekarang">
+            </div>
+
+            <div class="baris-form">
+                <div class="input-group">
+                    <label for="pass_baru">Password Baru</label>
+                    <input type="password" id="pass_baru"
+                           placeholder="Minimal 6 karakter">
+                </div>
+                <div class="input-group">
+                    <label for="pass_ulangi">Ulangi Password Baru</label>
+                    <input type="password" id="pass_ulangi"
+                           placeholder="Ulangi password baru">
+                </div>
+            </div>
+
+            <span id="pesanPassword"></span>
+
+            <button type="submit" class="btn-login" id="tombolPassword">
+                Simpan Password
+            </button>
+        </form>
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // ----------------------------------------------------------
+    //  Muat pengaturan sekarang
+    // ----------------------------------------------------------
+    async function muatSetelan() {
+        try {
+            const hasil = await api("api_setelan.php");
+
+            if (hasil.status === "success") {
+                document.getElementById("no_wa").value      = hasil.no_wa;
+                document.getElementById("admin_user").value = hasil.admin_user;
+            }
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    // ----------------------------------------------------------
+    //  Simpan kontak toko
+    // ----------------------------------------------------------
+    document.getElementById("formSetelan").addEventListener(
+        "submit", async function (e) {
+        e.preventDefault();
+
+        const pesan = document.getElementById("pesanSetelan");
+        pesan.style.color = "black";
+        pesan.innerText = "Menyimpan...";
+
+        try {
+            const hasil = await apiKirim("api_setelan.php", {
+                no_wa:      document.getElementById("no_wa").value.trim(),
+                admin_user: document.getElementById("admin_user").value.trim()
+            });
+
+            pesan.style.color = (hasil.status === "success") ? "green" : "red";
+            pesan.innerText = hasil.message;
+
+        } catch (err) {
+            console.error(err);
+            pesan.style.color = "red";
+            pesan.innerText = "Tidak bisa terhubung ke server. Cek XAMPP!";
+        }
+    });
+
+    // ----------------------------------------------------------
+    //  Ganti password
+    // ----------------------------------------------------------
+    document.getElementById("formPassword").addEventListener(
+        "submit", async function (e) {
+        e.preventDefault();
+
+        const pesan = document.getElementById("pesanPassword");
+        pesan.style.color = "black";
+        pesan.innerText = "Menyimpan...";
+
+        try {
+            const hasil = await apiKirim("api_setelan.php", {
+                no_wa:       document.getElementById("no_wa").value.trim(),
+                admin_user:  document.getElementById("admin_user").value.trim(),
+                pass_lama:   document.getElementById("pass_lama").value,
+                pass_baru:   document.getElementById("pass_baru").value,
+                pass_ulangi: document.getElementById("pass_ulangi").value
+            });
+
+            pesan.style.color = (hasil.status === "success") ? "green" : "red";
+            pesan.innerText = hasil.message;
+
+            if (hasil.status === "success") {
+                document.getElementById("pass_lama").value   = "";
+                document.getElementById("pass_baru").value   = "";
+                document.getElementById("pass_ulangi").value = "";
+            }
+
+        } catch (err) {
+            console.error(err);
+            pesan.style.color = "red";
+            pesan.innerText = "Tidak bisa terhubung ke server. Cek XAMPP!";
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        kunciAdmin();
+        muatSetelan();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+    <ul class="Login"><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="loginn">
+    <h2>Mau Menyelam <span>lebih Dalam?</span></h2>
+    <a>Tentunya dengan login kamu bisa Bergabung dengan kami!</a>
+</div>
+
+<div class="login-box">
+    <h2>Selamat Datang 🎮</h2>
+    <p>Silakan login untuk masuk ke GameDev</p>
+
+    <form id="formLogin">
+        <div class="input-group">
+            <label for="username">Username atau Email</label>
+            <input type="text" id="username" placeholder="Masukkan username kamu..." required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Masukkan password..." required>
+        </div>
+
+        <span id="pesan"></span>
+
+        <button type="submit" class="btn-login">Masuk Sekarang</button>
+
+        <dev class="hmm">
+            <a href="Contact.html">Opsi<span>Lain?</span></a>
+        </dev>
+        <dev class="hmm">
+            <a href="registrasi.html">Belum punya akun? <span>Daftar</span></a>
+        </dev>
+    </form>
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // Kalau sudah login, langsung bawa ke dashboard
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        if (infoAkun.login) {
+            window.location.href = (infoAkun.role === "admin")
+                ? "admin.html"
+                : "dashboard.html";
+        }
+
+        // Tampilkan info dari URL (?pesan=keluar, dsb.)
+        const parameter = new URLSearchParams(window.location.search);
+        const pesan = parameter.get("pesan");
+        const teks = document.getElementById("pesan");
+
+        if (pesan === "keluar") {
+            teks.style.color = "green";
+            teks.innerText = "Kamu sudah logout. Sampai jumpa! 👋";
+        } else if (pesan === "belum_login") {
+            teks.style.color = "#b05a00";
+            teks.innerText = "Silakan login dulu ya!";
+        } else if (pesan === "daftar_sukses") {
+            teks.style.color = "green";
+            teks.innerText = "Akun berhasil dibuat! Silakan login.";
+        }
+    });
+
+    const form  = document.getElementById("formLogin");
+    const pesan = document.getElementById("pesan");
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        pesan.style.color = "black";
+        pesan.innerText = "Sedang mengecek...";
+
+        try {
+            const hasil = await apiKirim("api_login.php", {
+                username: document.getElementById("username").value.trim(),
+                password: document.getElementById("password").value
+            });
+
+            if (hasil.status === "success") {
+                pesan.style.color = "green";
+                pesan.innerText = hasil.message;
+                setTimeout(function () {
+                    window.location.href = hasil.tujuan;
+                }, 900);
+            } else {
+                pesan.style.color = "red";
+                pesan.innerText = hasil.message;
+            }
+
+        } catch (err) {
+            console.error(err);
+            pesan.style.color = "red";
+            pesan.innerText = "Tidak bisa terhubung ke server. Cek XAMPP!";
+        }
+    });
+</script>
+
+</body>
+</html>

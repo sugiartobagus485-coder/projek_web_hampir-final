@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Registrasi</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        #pesanError {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #54826d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #426a59;
+        }
+
+        /* Tautan "Sudah punya akun? Login" di bawah form */
+        .sudah-punya-akun {
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+            margin-top: 18px;
+        }
+
+        .sudah-punya-akun a {
+            color: #2d6a4f;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .sudah-punya-akun a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Daftar Akun</h2>
+
+        <form id="formRegister">
+
+            <div class="form-group">
+                <label for="nama">Nama Lengkap</label>
+                <input 
+                    type="text" 
+                    id="nama" 
+                    placeholder="Masukkan nama">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="contoh@mail.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Minimal 8 karakter">
+            </div>
+
+            <div class="form-group">
+                <label for="konfirmasiPassword">
+                    Konfirmasi Password
+                </label>
+
+                <input 
+                    type="password" 
+                    id="konfirmasiPassword" 
+                    placeholder="Ulangi password">
+            </div>
+
+            <span id="pesanError"></span>
+
+            <button type="submit">
+                Daftar Sekarang
+            </button>
+
+            <p class="sudah-punya-akun">
+                Sudah punya akun?
+                <a href="login.html">Login di sini</a>
+            </p>
+
+        </form>
+
+    </div>
+
+    <script>
+
+        const form = document.getElementById("formRegister");
+        const pesanError = document.getElementById("pesanError");
+
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const nama = document.getElementById("nama").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const konfirmasiPassword =
+                document.getElementById("konfirmasiPassword").value;
+
+            // Validasi nama
+            if (nama === "") {
+                pesanError.style.color = "red";
+                pesanError.innerText = "Nama wajib diisi!";
+                return;
+            }
+
+            // Validasi email
+            if (email === "") {
+                pesanError.style.color = "red";
+                pesanError.innerText = "Email wajib diisi!";
+                return;
+            }
+
+            // Validasi password
+            if (password.length < 8) {
+                pesanError.style.color = "red";
+                pesanError.innerText =
+                    "Password harus minimal 8 karakter!";
+                return;
+            }
+
+            // Validasi konfirmasi password
+            if (password !== konfirmasiPassword) {
+                pesanError.style.color = "red";
+                pesanError.innerText =
+                    "Konfirmasi password tidak cocok!";
+                return;
+            }
+
+            pesanError.style.color = "black";
+            pesanError.innerText = "Sedang mendaftar...";
+
+            // Kirim data ke PHP
+            fetch("simpan.php", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    nama: nama,
+                    email: email,
+                    password: password
+                })
+
+            })
+
+            .then(response => response.text())
+
+            .then(data => {
+
+                console.log("HASIL DARI PHP:");
+                console.log(data);
+
+                // Coba ubah jawaban PHP menjadi JSON
+                try {
+
+                    const hasil = JSON.parse(data);
+
+                    if (hasil.status === "success") {
+
+                        pesanError.style.color = "green";
+                        pesanError.innerText = hasil.message;
+
+                        // Daftar berhasil -> arahkan ke halaman login
+                        setTimeout(function() {
+                            window.location.href = "login.html?pesan=daftar_sukses";
+                        }, 1500);
+
+                    } else {
+
+                        pesanError.style.color = "red";
+                        pesanError.innerText = hasil.message;
+
+                    }
+
+                } catch (error) {
+
+                    console.error("PHP ERROR:");
+                    console.error(data);
+
+                    pesanError.style.color = "red";
+
+                    pesanError.innerText =
+                        "Terjadi error pada server. Cek Console.";
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+                pesanError.style.color = "red";
+
+                pesanError.innerText =
+                    "Tidak dapat terhubung ke server!";
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>

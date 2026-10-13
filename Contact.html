@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+
+    <ul class="Login">
+      <li id="menuAuth"><a href="login.html">Login</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="contact-section">
+  <div class="contact-header">
+    <h2>Contact Us</h2>
+    <p>Punya pertanyaan, masukan, atau ingin mengajak kerja sama? Jangan ragu untuk mengirim pesan kepada tim kami!</p>
+  </div>
+
+  <div class="contact-wrapper">
+    <div class="contact-info">
+      <h3>Informasi Kontak</h3>
+      <p>Bisa juga hubungi kami langsung melalui kontak di bawah ini:</p>
+      
+      <div class="info-item">
+        <span class="icon">📍</span>
+        <p>Jl. Teknologi No. 99, Jakarta, Indonesia</p>
+      </div>
+      <div class="info-item">
+        <span class="icon">✉️</span>
+        <p>hello@ourproject.com</p>
+      </div>
+      <div class="info-item">
+        <span class="icon">📞</span>
+        <p>+62 812-3456-7890</p>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h3>Kirim Pesan</h3>
+      <form id="formKontak">
+        <div class="input-group">
+          <label for="name">Nama Lengkap</label>
+          <input type="text" id="name" placeholder="Masukkan nama kamu" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="email">Alamat Email</label>
+          <input type="email" id="email" placeholder="contoh@email.com" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="message">Pesan Kamu</label>
+          <textarea id="message" rows="5" placeholder="Tulis pesanmu di sini..." required></textarea>
+        </div>
+        
+        <button type="submit" class="btn-submit">Kirim Pesan Sekarang</button>
+        <!-- Tempat menampilkan pesan status -->
+        <p id="pesanError" style="margin-top: 10px; font-weight: bold;"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script>
+  const form = document.getElementById('formKontak');
+  const pesanError = document.getElementById('pesanError');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Mencegah halaman refresh
+    
+    pesanError.style.color = "green";
+    pesanError.innerText = "Pesan Berhasil Dikirim! Data siap diproses.";
+    
+    form.reset(); // Mengosongkan form setelah dikirim
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+    <ul class="Login"><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="katalog-head">
+        <div>
+            <h2>🛒 Keranjang &amp; Checkout</h2>
+            <p>Periksa pesananmu, lalu kirim ke admin via WhatsApp.</p>
+        </div>
+        <a href="katalog.html" class="tombol-keranjang">← Lanjut Belanja</a>
+    </div>
+
+    <div id="notif"></div>
+
+    <div id="keranjangKosong" class="kotak-kosong" style="display:none;">
+        <p>Keranjang masih kosong. Yuk pilih dulu di
+           <a href="katalog.html">Katalog</a>!</p>
+    </div>
+
+    <div id="areaKeranjang" style="display:none;">
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>PRODUK</th>
+                        <th>HARGA</th>
+                        <th>JUMLAH</th>
+                        <th>SUBTOTAL</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="isiKeranjang"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="bold" style="text-align:right;">
+                            TOTAL
+                        </td>
+                        <td class="bold" colspan="2" id="totalHarga"
+                            style="color:#2d6a4f;">Rp 0</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="kartu-form">
+            <h3>Data Pemesan</h3>
+
+            <form id="formCheckout">
+                <div class="input-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Nama kamu..." required>
+                </div>
+
+                <div class="input-group">
+                    <label for="wa">Nomor WhatsApp</label>
+                    <input type="text" id="wa" placeholder="Contoh: 081234567890" required>
+                    <small style="font-size:12px;color:#666;">
+                        Gunakan format 08xx. Nomor dirapikan otomatis oleh sistem.
+                    </small>
+                </div>
+
+                <div class="input-group">
+                    <label for="catatan">Catatan (opsional)</label>
+                    <textarea id="catatan" rows="3"
+                              placeholder="Contoh: mau dikirim versi Bahasa Indonesia"></textarea>
+                </div>
+
+                <span id="pesan"></span>
+
+                <button type="submit" class="btn-login">Buat Pesanan Sekarang</button>
+            </form>
+
+            <div id="hasilPesanan" style="display:none;">
+                <p class="notif" id="notifSukses"></p>
+                <a id="tombolWa" class="btn-login" target="_blank" rel="noopener"
+                   style="width:auto;padding:14px 24px;text-decoration:none;">
+                    💬 Kirim Pesanan ke WhatsApp Admin
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // ----------------------------------------------------------
+    //  Gambar isi keranjang
+    // ----------------------------------------------------------
+    function gambarKeranjang() {
+        const keranjang = ambilKeranjang();
+        const isi   = document.getElementById("isiKeranjang");
+        const area  = document.getElementById("areaKeranjang");
+        const kosong = document.getElementById("keranjangKosong");
+
+        isi.innerHTML = "";
+
+        if (keranjang.length === 0) {
+            area.style.display   = "none";
+            kosong.style.display = "block";
+            return;
+        }
+
+        area.style.display   = "block";
+        kosong.style.display = "none";
+
+        let total = 0;
+
+        keranjang.forEach(function (item, nomor) {
+            const subtotal = item.harga * item.qty;
+            total += subtotal;
+
+            const baris = document.createElement("tr");
+            baris.innerHTML =
+                '<td class="bold">' + aman(item.nama) + "</td>" +
+                "<td>" + rupiah(item.harga) + "</td>" +
+                '<td><input type="number" min="1" value="' + item.qty +
+                    '" class="input-qty" data-nomor="' + nomor + '"></td>' +
+                '<td class="bold">' + rupiah(subtotal) + "</td>" +
+                '<td><button type="button" class="tombol-hapus" data-nomor="' +
+                    nomor + '">Hapus</button></td>';
+
+            isi.appendChild(baris);
+        });
+
+        document.getElementById("totalHarga").innerText = rupiah(total);
+
+        // Ubah jumlah
+        document.querySelectorAll(".input-qty").forEach(function (input) {
+            input.addEventListener("change", function () {
+                const k = ambilKeranjang();
+                k[parseInt(this.dataset.nomor)].qty = parseInt(this.value) || 1;
+                simpanKeranjang(k);
+                gambarKeranjang();
+            });
+        });
+
+        // Hapus item
+        document.querySelectorAll(".tombol-hapus").forEach(function (tombol) {
+            tombol.addEventListener("click", function () {
+                const k = ambilKeranjang();
+                k.splice(parseInt(this.dataset.nomor), 1);
+                simpanKeranjang(k);
+                gambarKeranjang();
+            });
+        });
+    }
+
+    // ----------------------------------------------------------
+    //  Kirim pesanan ke API PHP
+    // ----------------------------------------------------------
+    const formCheckout = document.getElementById("formCheckout");
+    const pesan = document.getElementById("pesan");
+
+    formCheckout.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const keranjang = ambilKeranjang();
+
+        if (keranjang.length === 0) {
+            pesan.style.color = "red";
+            pesan.innerText = "Keranjang masih kosong!";
+            return;
+        }
+
+        pesan.style.color = "black";
+        pesan.innerText = "Menyimpan pesanan...";
+
+        try {
+            const hasil = await apiKirim("api_pesanan.php", {
+                nama:    document.getElementById("nama").value.trim(),
+                wa:      document.getElementById("wa").value.trim(),
+                catatan: document.getElementById("catatan").value.trim(),
+                items:   keranjang
+            });
+
+            if (hasil.status === "success") {
+                pesan.innerText = "";
+
+                document.getElementById("notifSukses").innerText =
+                    "Pesanan #" + hasil.id_pesanan +
+                    " berhasil dibuat! Total " + hasil.total +
+                    ". Klik tombol di bawah untuk konfirmasi ke admin.";
+
+                document.getElementById("tombolWa").href = hasil.link_wa;
+                document.getElementById("hasilPesanan").style.display = "block";
+                formCheckout.style.display = "none";
+
+                localStorage.removeItem(KERANJANG_KEY);
+                perbaruiLencanaKeranjang();
+            } else {
+                pesan.style.color = "red";
+                pesan.innerText = hasil.message;
+            }
+
+        } catch (err) {
+            console.error(err);
+            pesan.style.color = "red";
+            pesan.innerText = "Tidak bisa terhubung ke server. Cek XAMPP!";
+        }
+    });
+
+    // Kalau user sudah login, isi nama otomatis
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        if (infoAkun.login && infoAkun.nama) {
+            document.getElementById("nama").value = infoAkun.nama;
+        }
+        gambarKeranjang();
+    });
+</script>
+
+</body>
+</html>

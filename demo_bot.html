@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Bot Sederhana - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+    <ul class="Login"><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="katalog-head">
+        <div>
+            <h2>🤖 Demo Bot Sederhana</h2>
+            <p>Coba chat dengan bot otomatis. Ketik sesuatu dan lihat jawaban!</p>
+        </div>
+        <a href="katalog.html" class="tombol-keranjang">← Kembali</a>
+    </div>
+
+    <div class="kotak-form" style="background:#f8f8f8;">
+        <h3>💬 Percakapan</h3>
+        <div id="areaChat"
+             style="height:320px;overflow-y:auto;background:#ffffff;border-radius:10px;
+                    padding:14px;margin-bottom:14px;border:1px solid #e5e5e5;">
+        </div>
+        <div style="display:flex;gap:10px;">
+            <input type="text" id="kolomChat"
+                   placeholder="Ketik pesan..."
+                   style="flex:1;padding:12px 16px;border:1px solid #cbd5e1;
+                          border-radius:8px;font-family:'Poppins',sans-serif;font-size:14px;">
+            <button id="tombolKirim" class="btn-login"
+                    style="width:auto;padding:12px 22px;">
+                Kirim
+            </button>
+        </div>
+        <p style="font-size:12px;color:#888;margin-top:10px;">
+            Coba ketik: <b>halo</b>, <b>harga</b>, <b>produk</b>, <b>cara beli</b>, <b>terima kasih</b>
+        </p>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <a href="demo_pesan.html" class="btn-batal">📱 Coba Generator Pesan</a>
+            <button class="btn-kecil" onclick="location.reload()">🔄 Ulangi Chat</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // ----------------------------------------------------------
+    //  BOT SEDERHANA (berbasis aturan)
+    // ----------------------------------------------------------
+    const areaChat = document.getElementById("areaChat");
+    const kolomChat = document.getElementById("kolomChat");
+
+    function tambahPesan(teks, dari) {
+        const gelembung = document.createElement("div");
+        gelembung.style.cssText =
+            "display:inline-block;max-width:80%;padding:10px 14px;" +
+            "border-radius:12px;margin-bottom:10px;font-size:14px;" +
+            "line-height:1.6;clear:both;";
+
+        if (dari === "user") {
+            gelembung.style.cssText +=
+                "background:#d3ffea;color:#1b4332;float:right;";
+        } else {
+            gelembung.style.cssText +=
+                "background:#f0f0f0;color:#333;float:left;";
+        }
+
+        gelembung.innerText = teks;
+        areaChat.appendChild(gelembung);
+        areaChat.scrollTop = areaChat.scrollHeight;
+    }
+
+    function jawabBot(pesan) {
+        const p = pesan.toLowerCase();
+
+        if (p.includes("halo") || p.includes("hai") || p.includes("hi")) {
+            return "Halo! 👋 Ada yang bisa kami bantu? Kamu bisa tanya soal produk, harga, atau cara beli.";
+        }
+        if (p.includes("harga") || p.includes("price") || p.includes("murah")) {
+            return "Harga produk kami mulai dari Rp 30.000 lho! Ada untuk semua budget. Cek katalog untuk detailnya. 🛍️";
+        }
+        if (p.includes("produk") || p.includes("barang") || p.includes("jual")) {
+            return "Kami punya 80+ produk: source code game, web, Python, mobile, dan banyak lagi. Semua ada di halaman Katalog. 📦";
+        }
+        if (p.includes("beli") || p.includes("bayar") || p.includes("checkout")) {
+            return "Cara beli gampang! Pilih produk → keranjang → checkout → chat admin via WhatsApp. Lihat halaman Cara Beli untuk lengkapnya. 💳";
+        }
+        if (p.includes("terima kasih") || p.includes("makasih") || p.includes("thanks")) {
+            return "Sama-sama! 😊 Senang bisa membantu. Jangan ragu tanya lagi ya.";
+        }
+        if (p.includes("siapa") || p.includes("admin") || p.includes("kontak")) {
+            return "Kamu bisa hubungi admin kami lewat WhatsApp. Nomornya ada di halaman footer atau halaman Cara Beli. 📞";
+        }
+        if (p.includes("tolong") || p.includes("help") || p.includes("bantuan")) {
+            return "Tentu! Coba ketik: 'produk', 'harga', atau 'cara beli' untuk info lebih lanjut.";
+        }
+        return "Hmm, aku belum paham. Coba ketik 'produk', 'harga', atau 'cara beli' ya. Atau langsung chat admin untuk bantuan lebih cepat.";
+    }
+
+    async function kirimPesan() {
+        const teks = kolomChat.value.trim();
+        if (teks === "") return;
+
+        tambahPesan(teks, "user");
+        kolomChat.value = "";
+
+        // Bot "mengetik..." sebentar
+        setTimeout(function () {
+            tambahPesan(jawabBot(teks), "bot");
+        }, 600);
+    }
+
+    document.getElementById("tombolKirim").addEventListener("click", kirimPesan);
+    kolomChat.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") kirimPesan();
+    });
+
+    // Sapaan awal bot
+    document.addEventListener("DOMContentLoaded", function () {
+        tambahPesan("Halo! 👋 Saya bot GameDev. Ada yang bisa dibantu?", "bot");
+    });
+</script>
+
+</body>
+</html>

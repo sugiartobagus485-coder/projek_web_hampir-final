@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesanan Masuk - GameDev Admin</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav class="nav-admin">
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span> Admin</div>
+    <ul class="PepekNav">
+      <li><a href="admin.html">Ringkasan <span id="lencanaNotif" class="lencana-notif" style="display:none;"></span></a></li>
+      <li><a href="admin_produk.html">Kelola Produk</a></li>
+      <li><a href="admin_pesanan.html">Pesanan</a></li>
+      <li><a href="admin_setelan.html">Pengaturan</a></li>
+    </ul>
+    <ul class="Login"><li><a href="katalog.html">Lihat Toko</a></li><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="kepala">
+        <div>
+            <span class="lencana">Dashboard Admin</span>
+            <h2>Pesanan Masuk</h2>
+            <p>Hubungi pembeli lewat WhatsApp, lalu ubah status pesanannya.</p>
+        </div>
+    </div>
+
+    <div id="notif"></div>
+    <div id="tempatPesanan"></div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    async function muatPesanan() {
+        const tempat = document.getElementById("tempatPesanan");
+
+        try {
+            const hasil = await api("api_pesanan.php");
+
+            if (hasil.status !== "success" || hasil.pesanan.length === 0) {
+                tempat.innerHTML =
+                    '<div class="kotak-kosong"><p>Belum ada pesanan ' +
+                    "yang masuk.</p></div>";
+                return;
+            }
+
+            let html =
+                '<div class="table-container"><table>' +
+                "<thead><tr>" +
+                "<th>NO</th><th>PEMBELI</th><th>NO. WA</th>" +
+                "<th>TOTAL</th><th>STATUS</th><th>TANGGAL</th>" +
+                "<th>AKSI</th>" +
+                "</tr></thead><tbody>";
+
+            hasil.pesanan.forEach(function (p) {
+                // Link chat WhatsApp
+                const chat =
+                    "https://wa.me/" + (infoAkun.no_wa || "6281234567890") +
+                    "?text=" + encodeURIComponent(
+                        "Halo " + p.nama + ", soal pesanan #" + p.id +
+                        " di GameDev..."
+                    );
+
+                html += "<tr>" +
+                    '<td class="bold">#' + p.id + "</td>" +
+                    '<td class="bold">' + aman(p.nama) + "</td>" +
+                    "<td>" + aman(p.wa) + "</td>" +
+                    '<td class="bold">' + rupiah(p.total) + "</td>" +
+                    '<td><span class="badge ' + lencanaStatus(p.status) + '">' +
+                        aman(p.status) + "</span></td>" +
+                    "<td>" + aman(p.tanggal) + "</td>" +
+                    '<td class="aksi">' +
+                      '<a class="tombol-edit" href="' + chat +
+                        '" target="_blank" rel="noopener">Chat WA</a>' +
+                    "</td>" +
+                "</tr>";
+
+                // --- Baris rincian ---
+                html += '<tr class="baris-detail"><td></td><td colspan="6">';
+
+                if (p.catatan) {
+                    html += "<p><b>Catatan:</b> " + aman(p.catatan) + "</p>";
+                }
+
+                html += "<ul class='daftar-item'>";
+                p.isi.forEach(function (item) {
+                    const sub = item.harga * item.qty;
+                    html += "<li>" + aman(item.nama) + " &times; " +
+                            item.qty +
+                            " <span>= " + rupiah(sub) + "</span></li>";
+                });
+                html += "</ul>";
+
+                html += '<form class="form-status" data-id="' + p.id + '">' +
+                    "<label>Ubah status:</label>" +
+                    '<select class="pilih-status">' +
+                      ["Menunggu", "Diproses", "Selesai", "Dibatalkan"]
+                        .map(function (s) {
+                            return '<option value="' + s + '"' +
+                                   (p.status === s ? " selected" : "") + ">" +
+                                   s + "</option>";
+                        }).join("") +
+                    "</select>" +
+                    '<button type="submit" class="btn-kecil">Simpan</button>' +
+                "</form>";
+
+                html += "</td></tr>";
+            });
+
+            html += "</tbody></table></div>";
+            tempat.innerHTML = html;
+
+            // --- Pasang form ubah status ---
+            document.querySelectorAll(".form-status").forEach(function (form) {
+                form.addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    const id     = this.dataset.id;
+                    const status = this.querySelector(".pilih-status").value;
+                    const btn  = this.querySelector("button");
+
+                    btn.innerText = "Menyimpan...";
+
+                    try {
+                        const hasilSimpan = await apiKirim(
+                            "api_pesanan_status.php",
+                            { id: id, status: status }
+                        );
+
+                        tampilkanNotif(hasilSimpan.message,
+                                       hasilSimpan.status === "success"
+                                            ? "" : "error");
+                        muatPesanan();
+
+                    } catch (err) {
+                        console.error(err);
+                        tampilkanNotif("Gagal menyimpan status.", "error");
+                        btn.innerText = "Simpan";
+                    }
+                });
+            });
+
+        } catch (e) {
+            console.error(e);
+            tampilkanNotif("Tidak bisa memuat pesanan. Cek XAMPP!", "error");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        kunciAdmin();
+        muatPesanan();
+    });
+</script>
+
+</body>
+</html>

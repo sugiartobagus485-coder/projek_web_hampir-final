@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+    <ul class="Login"><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="katalog-head">
+        <div>
+            <h2>Katalog Kode</h2>
+            <p>Pilih bahasa pemrograman & source code game siap pakai.</p>
+        </div>
+        <a href="checkout.html" class="tombol-keranjang">
+            🛒 Keranjang <span id="badgeKeranjang">0</span>
+        </a>
+    </div>
+
+    <div id="notif"></div>
+
+    <div class="kategori-bar" id="kategoriBar">
+        <button type="button" class="tombol-kategori aktif" data-kategori="">
+            Semua
+        </button>
+    </div>
+
+    <form class="form-cari" id="formCari">
+        <input type="text" id="kolomCari" placeholder="Cari produk...">
+        <select id="kolomUrut">
+            <option value="terbaru">Terbaru</option>
+            <option value="harga_asc">Harga Termurah</option>
+            <option value="harga_desc">Harga Termahal</option>
+        </select>
+        <button type="submit" class="btn-kecil">Cari</button>
+        <a href="katalog.html" class="btn-batal">Reset</a>
+    </form>
+
+    <div id="daftarProduk" class="grid-produk"></div>
+
+    <div id="kosong" class="kotak-kosong" style="display:none;">
+        <p>Produk tidak ditemukan. Coba kata kunci lain.</p>
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // ----------------------------------------------------------
+    //  Ambil produk dari API PHP
+    // ----------------------------------------------------------
+    let kategoriAktif = "";
+
+    async function muatProduk() {
+        const cari     = document.getElementById("kolomCari").value;
+        const kategori = kategoriAktif;
+        const urut     = document.getElementById("kolomUrut").value;
+
+        let url = "api_produk.php?cari=" + encodeURIComponent(cari) +
+                  "&kategori=" + encodeURIComponent(kategori) +
+                  "&urut=" + encodeURIComponent(urut);
+
+        try {
+            const hasil = await api(url);
+
+            if (hasil.status !== "success") {
+                tampilkanNotif(hasil.message || "Gagal memuat produk.", "error");
+                return;
+            }
+
+            // Buat tombol kategori (sekali saja)
+            const bar = document.getElementById("kategoriBar");
+            if (bar.querySelectorAll(".tombol-kategori").length <= 1 &&
+                hasil.kategori.length > 0) {
+                bar.innerHTML =
+                    '<button type="button" class="tombol-kategori aktif" ' +
+                    'data-kategori="">Semua</button>';
+
+                hasil.kategori.forEach(function (k) {
+                    const tombol = document.createElement("button");
+                    tombol.type = "button";
+                    tombol.className = "tombol-kategori";
+                    tombol.dataset.kategori = k;
+                    tombol.innerText = k;
+                    bar.appendChild(tombol);
+                });
+
+                // Pasang aksi klik kategori
+                bar.querySelectorAll(".tombol-kategori").forEach(function (t) {
+                    t.addEventListener("click", function () {
+                        bar.querySelectorAll(".tombol-kategori")
+                            .forEach(function (x) { x.classList.remove("aktif"); });
+                        this.classList.add("aktif");
+                        kategoriAktif = this.dataset.kategori;
+                        muatProduk();
+                    });
+                });
+            }
+
+            // Gambar kartu produk
+            const tempat = document.getElementById("daftarProduk");
+            const kosong = document.getElementById("kosong");
+            tempat.innerHTML = "";
+
+            if (hasil.produk.length === 0) {
+                kosong.style.display = "block";
+                return;
+            }
+            kosong.style.display = "none";
+
+            hasil.produk.forEach(function (p) {
+                const kartu = document.createElement("div");
+                kartu.className = "kartu-produk";
+
+                const stokHabis = p.stok <= 0;
+                const tombol = stokHabis
+                    ? '<span class="habis">Stok habis</span>'
+                    : '<button type="button" class="btn-beli" ' +
+                      'data-id="' + p.id + '" ' +
+                      'data-nama="' + aman(p.nama) + '" ' +
+                      'data-harga="' + p.harga + '">+ Keranjang</button>';
+
+                kartu.innerHTML =
+                    '<div class="ikon-produk">' + aman(p.gambar) + "</div>" +
+                    "<h3>" + aman(p.nama) + "</h3>" +
+                    '<p class="bahasa">' + aman(p.bahasa) + "</p>" +
+                    '<p class="deskripsi">' + aman(p.deskripsi) + "</p>" +
+                    '<p class="harga">' + rupiah(p.harga) + "</p>" +
+                    '<div class="kaki-produk">' +
+                      '<span class="badge ' + lencanaTingkat(p.tingkat) + '">' +
+                        aman(p.tingkat) + "</span>" +
+                      tombol +
+                    "</div>";
+
+                tempat.appendChild(kartu);
+
+                // Klik kartu -> ke halaman detail produk
+                kartu.addEventListener("click", function (e) {
+                    if (e.target.closest(".btn-beli")) return;
+                    window.location.href = "detail.html?id=" + p.id;
+                });
+            });
+
+            // Pasang tombol "+ Keranjang"
+            document.querySelectorAll(".btn-beli").forEach(function (tombol) {
+                tombol.addEventListener("click", function () {
+                    tambahKeKeranjang(
+                        parseInt(this.dataset.id),
+                        this.dataset.nama,
+                        parseInt(this.dataset.harga)
+                    );
+
+                    const asli = this.innerText;
+                    this.innerText = "✓ Ditambahkan";
+                    this.classList.add("sudah");
+                    setTimeout(function () {
+                        tombol.innerText = asli;
+                        tombol.classList.remove("sudah");
+                    }, 1200);
+                });
+            });
+
+        } catch (e) {
+            console.error(e);
+            tampilkanNotif(
+                "Tidak bisa terhubung ke server. Pastikan XAMPP Apache menyala.",
+                "error"
+            );
+        }
+    }
+
+    document.getElementById("formCari")
+            .addEventListener("submit", function (e) {
+        e.preventDefault();
+        muatProduk();
+    });
+
+    muatProduk();
+</script>
+
+</body>
+</html>

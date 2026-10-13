@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav class="nav-admin">
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span> Admin</div>
+    <ul class="PepekNav">
+      <li><a href="admin.html">Ringkasan <span id="lencanaNotif" class="lencana-notif" style="display:none;"></span></a></li>
+      <li><a href="admin_produk.html">Kelola Produk</a></li>
+      <li><a href="admin_pesanan.html">Pesanan</a></li>
+      <li><a href="admin_setelan.html">Pengaturan</a></li>
+    </ul>
+    <ul class="Login"><li><a href="katalog.html">Lihat Toko</a></li><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="kepala">
+        <div>
+            <span class="lencana">Dashboard Admin</span>
+            <h2>Selamat datang, <span id="namaAdmin">Admin</span> 👋</h2>
+            <p>Kelola produk dan pesanan pelanggan dari satu tempat.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="btn-login" href="admin_produk.html"
+               style="width:auto;padding:12px 22px;text-decoration:none;">
+                + Tambah Produk
+            </a>
+            <a class="btn-kecil" href="api_backup.php"
+               style="display:inline-block;padding:12px 22px;">
+                💾 Backup Database
+            </a>
+        </div>
+    </div>
+
+    <div id="notif"></div>
+
+    <div class="kartu-statistik">
+        <div class="kartu">
+            <h3>Total Produk</h3>
+            <div class="angka" id="statProduk">0</div>
+        </div>
+        <div class="kartu">
+            <h3>Total Pesanan</h3>
+            <div class="angka" id="statPesanan">0</div>
+        </div>
+        <div class="kartu">
+            <h3>Perlu Diproses</h3>
+            <div class="angka" id="statBaru">0</div>
+        </div>
+        <div class="kartu">
+            <h3>Pendapatan</h3>
+            <div class="angka" id="statPendapatan" style="font-size:24px;">Rp 0</div>
+        </div>
+    </div>
+
+    <h3 class="judul-bagian">Pesanan Terbaru</h3>
+    <div id="tempatPesanan"></div>
+
+    <h3 class="judul-bagian">⚠️ Stok Menipis</h3>
+    <div id="tempatStok"></div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        kunciAdmin();
+
+        document.getElementById("namaAdmin").innerText = infoAkun.nama;
+
+        try {
+            // Ambil produk & pesanan sekaligus
+            const [dataProduk, dataPesanan] = await Promise.all([
+                api("api_produk.php"),
+                api("api_pesanan.php")
+            ]);
+
+            const produk  = dataProduk.produk  || [];
+            const pesanan = dataPesanan.pesanan || [];
+
+            // --- Statistik ---
+            document.getElementById("statProduk").innerText  = produk.length;
+            document.getElementById("statPesanan").innerText = pesanan.length;
+
+            const baru = pesanan.filter(function (p) {
+                return p.status === "Menunggu";
+            }).length;
+            document.getElementById("statBaru").innerText = baru;
+
+            let pendapatan = 0;
+            pesanan.forEach(function (p) {
+                if (p.status === "Selesai") pendapatan += p.total;
+            });
+            document.getElementById("statPendapatan").innerText =
+                rupiah(pendapatan);
+
+            // --- Pesanan terbaru (5 terakhir) ---
+            const tempat = document.getElementById("tempatPesanan");
+
+            if (pesanan.length === 0) {
+                tempat.innerHTML =
+                    '<div class="kotak-kosong"><p>Belum ada pesanan. ' +
+                    "Bagikan halaman <b>Katalog</b> ke pelanggan dulu ya.</p></div>";
+            } else {
+                let html =
+                    '<div class="table-container"><table>' +
+                    "<thead><tr>" +
+                    "<th>NO</th><th>PEMBELI</th><th>NO. WA</th>" +
+                    "<th>TOTAL</th><th>STATUS</th><th>TANGGAL</th>" +
+                    "</tr></thead><tbody>";
+
+                pesanan.slice(0, 5).forEach(function (p) {
+                    html += "<tr>" +
+                        '<td class="bold">#' + p.id + "</td>" +
+                        '<td class="bold">' + aman(p.nama) + "</td>" +
+                        "<td>" + aman(p.wa) + "</td>" +
+                        '<td class="bold">' + rupiah(p.total) + "</td>" +
+                        '<td><span class="badge ' + lencanaStatus(p.status) + '">' +
+                            aman(p.status) + "</span></td>" +
+                        "<td>" + aman(p.tanggal) + "</td>" +
+                    "</tr>";
+                });
+
+                html += "</tbody></table></div>" +
+                        '<p class="lihat-semua"><a href="admin_pesanan.html">' +
+                        "Lihat semua pesanan →</a></p>";
+
+                tempat.innerHTML = html;
+            }
+
+            // --- Stok menipis ---
+            const tempatStok = document.getElementById("tempatStok");
+            const menipis = produk.filter(function (p) {
+                return p.stok <= 3;
+            });
+
+            if (menipis.length === 0) {
+                tempatStok.innerHTML =
+                    '<div class="kotak-kosong"><p>Stok semua produk aman.</p></div>';
+            } else {
+                let html =
+                    '<div class="table-container"><table>' +
+                    "<thead><tr><th>PRODUK</th><th>SISA STOK</th></tr></thead><tbody>";
+
+                menipis.forEach(function (p) {
+                    html += "<tr>" +
+                        '<td class="bold">' + aman(p.gambar) + " " +
+                            aman(p.nama) + "</td>" +
+                        '<td><span class="badge advanced">' + p.stok + "</span></td>" +
+                    "</tr>";
+                });
+
+                html += "</tbody></table></div>";
+                tempatStok.innerHTML = html;
+            }
+
+        } catch (e) {
+            console.error(e);
+            tampilkanNotif("Tidak bisa memuat data. Cek XAMPP!", "error");
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk - GameDev</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav>
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span></div>
+    <ul class="PepekNav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="Contact.html">ContactUs</a></li>
+      <li><a href="OurProject.html">OurProject</a></li>
+      <li><a href="katalog.html">Katalog</a></li>
+      <li><a href="cara_beli.html">Cara Beli</a></li>
+      <li><a href="demo_pesan.html">Demo</a></li>
+    </ul>
+    <ul class="Login"><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="katalog-head">
+        <div>
+            <h2 id="judulProduk">Detail Produk</h2>
+            <p id="subProduk"></p>
+        </div>
+        <a href="katalog.html" class="tombol-keranjang">← Kembali ke Katalog</a>
+    </div>
+
+    <div id="notif"></div>
+
+    <div id="areaDetail" style="display:none;">
+
+        <div class="detail-grid">
+            <div class="detail-ikon" id="detailIkon">📦</div>
+
+            <div class="detail-info">
+                <h1 id="detailNama"></h1>
+                <p class="detail-kategori">
+                    <span id="detailKategori" class="badge mudah"></span>
+                    <span id="detailBahasa" class="badge menengah"></span>
+                    <span id="detailTingkat" class="badge advanced"></span>
+                </p>
+                <p class="detail-harga" id="detailHarga"></p>
+                <p class="detail-stok" id="detailStok"></p>
+
+                <div class="detail-aksi">
+                    <button id="tombolKeranjang" class="btn-login"
+                            style="width:auto;padding:14px 26px;">
+                        🛒 Tambah ke Keranjang
+                    </button>
+                    <a href="cara_beli.html" class="btn-kecil"
+                       style="display:inline-block;padding:14px 22px;">
+                        ❓ Cara Beli
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="kartu-form">
+            <h3>📋 Deskripsi Produk</h3>
+            <p id="detailDeskripsi" style="font-size:14px;line-height:1.8;color:#555;"></p>
+        </div>
+
+        <div class="kartu-form" style="background:#f8f8f8;">
+            <h3>📦 Isi Paket</h3>
+            <ul style="line-height:1.9;color:#555;font-size:14px;">
+                <li>✅ Source code lengkap (siap pakai)</li>
+                <li>✅ Dokumen cara pakai Bahasa Indonesia</li>
+                <li>✅ File aset (gambar/suara bila ada)</li>
+                <li>✅ 1x revisi kalau ada kesalahan</li>
+                <li>📩 Dikirim lewat WhatsApp / Email</li>
+            </ul>
+        </div>
+
+        <h3 class="judul-bagian">Produk Terkait</h3>
+        <div id="terkait" class="grid-produk"></div>
+
+    </div>
+
+    <div id="tidakAda" class="kotak-kosong" style="display:none;">
+        <p>Produk tidak ditemukan. <a href="katalog.html">Kembali ke Katalog</a></p>
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // ----------------------------------------------------------
+    //  Baca ID dari URL (?id=5)
+    // ----------------------------------------------------------
+    const parameter  = new URLSearchParams(window.location.search);
+    const idProduk   = parseInt(parameter.get("id") || "0");
+    let dataProduk   = null;
+
+    async function muatDetail() {
+        if (idProduk <= 0) {
+            document.getElementById("areaDetail").style.display = "none";
+            document.getElementById("tidakAda").style.display = "block";
+            return;
+        }
+
+        try {
+            const hasil = await api("api_detail.php?id=" + idProduk);
+
+            if (hasil.status !== "success") {
+                document.getElementById("areaDetail").style.display = "none";
+                document.getElementById("tidakAda").style.display = "block";
+                return;
+            }
+
+            dataProduk = hasil.produk;
+
+            // Judul halaman
+            document.title = dataProduk.nama + " - GameDev";
+
+            document.getElementById("judulProduk").innerText = dataProduk.nama;
+            document.getElementById("subProduk").innerText =
+                dataProduk.kategori + " • " + dataProduk.bahasa;
+
+            document.getElementById("detailIkon").innerText  = dataProduk.gambar;
+            document.getElementById("detailNama").innerText  = dataProduk.nama;
+            document.getElementById("detailKategori").innerText = dataProduk.kategori;
+            document.getElementById("detailBahasa").innerText  = dataProduk.bahasa;
+            document.getElementById("detailTingkat").innerText = dataProduk.tingkat;
+            document.getElementById("detailHarga").innerText   = rupiah(dataProduk.harga);
+            document.getElementById("detailDeskripsi").innerText = dataProduk.deskripsi;
+
+            const stok = dataProduk.stok;
+            const infoStok = document.getElementById("detailStok");
+            if (stok <= 0) {
+                infoStok.innerText = "Stok habis";
+                infoStok.style.color = "#c02727";
+                infoStok.style.fontWeight = "700";
+                document.getElementById("tombolKeranjang").disabled = true;
+                document.getElementById("tombolKeranjang").innerText = "Stok Habis";
+            } else {
+                infoStok.innerText = "Stok tersedia: " + stok;
+                infoStok.style.color = "#2d6a4f";
+                infoStok.style.fontWeight = "600";
+            }
+
+            document.getElementById("areaDetail").style.display = "block";
+
+            // Tombol tambah ke keranjang
+            document.getElementById("tombolKeranjang")
+                .addEventListener("click", function () {
+                    if (dataProduk.stok <= 0) return;
+                    tambahKeKeranjang(dataProduk.id, dataProduk.nama, dataProduk.harga);
+                    this.innerText = "✓ Ditambahkan";
+                    this.classList.add("sudah");
+                    setTimeout(() => {
+                        this.innerText = "🛒 Tambah ke Keranjang";
+                        this.classList.remove("sudah");
+                    }, 1400);
+                });
+
+            // Produk terkait
+            const tempat = document.getElementById("terkait");
+            if (hasil.terkait.length === 0) {
+                tempat.innerHTML =
+                    '<div class="kotak-kosong" style="flex:1 1 100%;">' +
+                    "<p>Belum ada produk terkait.</p></div>";
+            } else {
+                hasil.terkait.forEach(function (p) {
+                    const kartu = document.createElement("div");
+                    kartu.className = "kartu-produk";
+                    kartu.style.cursor = "pointer";
+                    kartu.innerHTML =
+                        '<div class="ikon-produk">' + aman(p.gambar) + "</div>" +
+                        "<h3>" + aman(p.nama) + "</h3>" +
+                        '<p class="bahasa">' + aman(p.bahasa) + "</p>" +
+                        '<p class="harga">' + rupiah(p.harga) + "</p>" +
+                        '<div class="kaki-produk">' +
+                          '<span class="badge ' + lencanaTingkat(p.tingkat) + '">' +
+                            aman(p.tingkat) + "</span>" +
+                          '<a class="btn-beli" href="detail.html?id=' + p.id + '">Lihat</a>' +
+                        "</div>";
+                    // Klik kartu mana pun -> pindah ke detail produk itu
+                    kartu.addEventListener("click", function () {
+                        window.location.href = "detail.html?id=" + p.id;
+                    });
+                    tempat.appendChild(kartu);
+                });
+            }
+
+        } catch (e) {
+            console.error(e);
+            tampilkanNotif("Tidak bisa memuat detail. Cek XAMPP!", "error");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        muatDetail();
+    });
+</script>
+
+</body>
+</html>

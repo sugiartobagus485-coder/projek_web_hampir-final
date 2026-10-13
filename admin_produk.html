@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Produk - GameDev Admin</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<nav class="nav-admin">
+  <div class="Pepek">
+    <div class="logo">Game<span>Dev</span> Admin</div>
+    <ul class="PepekNav">
+      <li><a href="admin.html">Ringkasan <span id="lencanaNotif" class="lencana-notif" style="display:none;"></span></a></li>
+      <li><a href="admin_produk.html">Kelola Produk</a></li>
+      <li><a href="admin_pesanan.html">Pesanan</a></li>
+      <li><a href="admin_setelan.html">Pengaturan</a></li>
+    </ul>
+    <ul class="Login"><li><a href="katalog.html">Lihat Toko</a></li><li id="menuAuth"><a href="login.html">Login</a></li></ul>
+  </div>
+</nav>
+
+<div class="bungkus">
+
+    <div class="kepala">
+        <div>
+            <span class="lencana">Dashboard Admin</span>
+            <h2>Kelola Produk</h2>
+            <p>Tambah kode / bahasa pemrograman yang mau dijual.</p>
+        </div>
+    </div>
+
+    <div id="notif"></div>
+
+    <div class="kartu-form">
+        <h3 id="judulForm">➕ Tambah Produk Baru</h3>
+
+        <form id="formProduk">
+            <input type="hidden" id="id" value="0">
+
+            <div class="input-group">
+                <label for="nama">Nama Produk</label>
+                <input type="text" id="nama"
+                       placeholder="Contoh: Source Code Game Ular 2D" required>
+            </div>
+
+            <div class="input-group">
+                <label for="bahasa">Bahasa / Library</label>
+                <input type="text" id="bahasa"
+                       placeholder="Contoh: Python / Pygame" required>
+            </div>
+
+            <div class="input-group">
+                <label for="kategori">Kategori</label>
+                <select id="kategori">
+                    <option value="Game Dev">🎮 Game Dev</option>
+                    <option value="Web Dev">🌐 Web Dev</option>
+                    <option value="Python">🐍 Python</option>
+                    <option value="Mobile">📱 Mobile</option>
+                    <option value="Backend">🗄️ Backend</option>
+                    <option value="AI &amp; Data">🤖 AI &amp; Data</option>
+                    <option value="Tools">🔧 Tools</option>
+                    <option value="Desain">🎨 Desain</option>
+                    <option value="Keamanan">🔒 Keamanan</option>
+                    <option value="Produktivitas">💼 Produktivitas</option>
+                    <option value="Lainnya">📦 Lainnya</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="deskripsi">Deskripsi</label>
+                <textarea id="deskripsi" rows="4"
+                          placeholder="Jelaskan isi produknya..."></textarea>
+            </div>
+
+            <div class="baris-form">
+                <div class="input-group">
+                    <label for="harga">Harga (Rp)</label>
+                    <input type="number" id="harga" min="0" step="500" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="tingkat">Tingkat Kesulitan</label>
+                    <select id="tingkat">
+                        <option value="Mudah">Mudah</option>
+                        <option value="Menengah">Menengah</option>
+                        <option value="Sulit">Sulit</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="baris-form">
+                <div class="input-group">
+                    <label for="gambar">Emoji Ikon</label>
+                    <input type="text" id="gambar" maxlength="8" placeholder="🐍">
+                </div>
+
+                <div class="input-group">
+                    <label for="stok">Stok</label>
+                    <input type="number" id="stok" value="1" min="0">
+                </div>
+            </div>
+
+            <span id="pesan"></span>
+
+            <button type="submit" class="btn-login" id="tombolSimpan">
+                Tambah Produk
+            </button>
+            <a class="btn-batal" href="admin_produk.html">Reset Form</a>
+        </form>
+    </div>
+
+    <h3 class="judul-bagian">Daftar Produk</h3>
+    <div id="tempatProduk" class="table-container"></div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+<script>
+    // ----------------------------------------------------------
+    //  Ambil semua produk
+    // ----------------------------------------------------------
+    async function muatProduk() {
+        const tempat = document.getElementById("tempatProduk");
+
+        try {
+            const hasil = await api("api_produk.php");
+
+            if (hasil.status !== "success" || hasil.produk.length === 0) {
+                tempat.innerHTML =
+                    "<table><tbody><tr><td style='text-align:center;" +
+                    "color:#888;'>Belum ada produk.</td></tr></tbody></table>";
+                return;
+            }
+
+            let html =
+                "<thead><tr>" +
+                "<th>IKON</th><th>NAMA PRODUK</th><th>BAHASA</th>" +
+                "<th>HARGA</th><th>TINGKAT</th><th>STOK</th><th>AKSI</th>" +
+                "</tr></thead><tbody>";
+
+            hasil.produk.forEach(function (p) {
+                html += "<tr>" +
+                    '<td style="font-size:22px;">' + aman(p.gambar) + "</td>" +
+                    '<td class="bold">' + aman(p.nama) + "</td>" +
+                    "<td>" + aman(p.bahasa) + "</td>" +
+                    '<td class="bold">' + rupiah(p.harga) + "</td>" +
+                    '<td><span class="badge ' + lencanaTingkat(p.tingkat) + '">' +
+                        aman(p.tingkat) + "</span></td>" +
+                    "<td>" + p.stok + "</td>" +
+                    '<td class="aksi">' +
+                      '<a class="tombol-edit" href="#" data-id="' + p.id + '">Edit</a>' +
+                      '<a class="tombol-hapus" href="#" data-id="' + p.id +
+                        '" data-nama="' + aman(p.nama) + '">Hapus</a>' +
+                    "</td>" +
+                "</tr>";
+            });
+
+            html += "</tbody></table>";
+            tempat.innerHTML = html;
+
+            // --- Tombol EDIT: isi form ---
+            document.querySelectorAll(".tombol-edit").forEach(function (tombol) {
+                tombol.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const id = parseInt(this.dataset.id);
+                    const produk = hasil.produk.find(function (p) {
+                        return p.id === id;
+                    });
+                    if (!produk) return;
+
+                    document.getElementById("id").value      = produk.id;
+                    document.getElementById("nama").value    = produk.nama;
+                    document.getElementById("bahasa").value  = produk.bahasa;
+                    document.getElementById("kategori").value = produk.kategori;
+                    document.getElementById("deskripsi").value = produk.deskripsi;
+                    document.getElementById("harga").value   = produk.harga;
+                    document.getElementById("tingkat").value = produk.tingkat;
+                    document.getElementById("gambar").value  = produk.gambar;
+                    document.getElementById("stok").value    = produk.stok;
+
+                    document.getElementById("judulForm").innerText =
+                        "✏️ Edit Produk";
+                    document.getElementById("tombolSimpan").innerText =
+                        "Simpan Perubahan";
+
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                });
+            });
+
+            // --- Tombol HAPUS ---
+            document.querySelectorAll(".tombol-hapus").forEach(function (tombol) {
+                tombol.addEventListener("click", async function (e) {
+                    e.preventDefault();
+
+                    if (!confirm("Yakin mau hapus produk: " +
+                                 this.dataset.nama + "?")) {
+                        return;
+                    }
+
+                    try {
+                        const hasilHapus = await api(
+                            "api_produk_hapus.php?id=" + this.dataset.id
+                        );
+                        tampilkanNotif(hasilHapus.message,
+                                       hasilHapus.status === "success"
+                                            ? "" : "error");
+                        muatProduk();
+                    } catch (err) {
+                        console.error(err);
+                        tampilkanNotif("Gagal menghapus produk.", "error");
+                    }
+                });
+            });
+
+        } catch (e) {
+            console.error(e);
+            tampilkanNotif("Tidak bisa memuat produk. Cek XAMPP!", "error");
+        }
+    }
+
+    // ----------------------------------------------------------
+    //  Simpan produk (tambah / edit)
+    // ----------------------------------------------------------
+    const form  = document.getElementById("formProduk");
+    const pesan = document.getElementById("pesan");
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        pesan.style.color = "black";
+        pesan.innerText = "Menyimpan...";
+
+        try {
+            const hasil = await apiKirim("api_produk.php", {
+                id:        document.getElementById("id").value,
+                nama:      document.getElementById("nama").value.trim(),
+                bahasa:    document.getElementById("bahasa").value.trim(),
+                kategori:  document.getElementById("kategori").value,
+                deskripsi: document.getElementById("deskripsi").value.trim(),
+                harga:     document.getElementById("harga").value,
+                tingkat:   document.getElementById("tingkat").value,
+                gambar:    document.getElementById("gambar").value.trim(),
+                stok:      document.getElementById("stok").value
+            });
+
+            pesan.style.color = (hasil.status === "success") ? "green" : "red";
+            pesan.innerText = hasil.message;
+
+            if (hasil.status === "success") {
+                setTimeout(function () {
+                    window.location.href = "admin_produk.html";
+                }, 900);
+            }
+
+        } catch (err) {
+            console.error(err);
+            pesan.style.color = "red";
+            pesan.innerText = "Tidak bisa terhubung ke server. Cek XAMPP!";
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        await muatStatus();
+        kunciAdmin();
+        muatProduk();
+    });
+</script>
+
+</body>
+</html>

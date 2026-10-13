@@ -1,0 +1,1992 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    width: 97%;
+    margin: auto;
+
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    /* Wajib ada: Menentukan jarak tempel dari atas layar */
+    z-index: 1000;
+    background: rgba(246, 246, 246, 0.88);
+    backdrop-filter: blur(10px);
+    padding: 0 6%;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+
+}
+
+.logo {
+    font-weight: 1000;
+    font-size: 20px;
+    padding-left: -150px;
+}
+
+.Pepek {
+    max-width: 1100px;
+    margin: auto;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    font-family: 'DM Serif Display', serif;
+
+
+}
+
+.Pepek span {
+    color: #2d6a4f;
+}
+
+
+.apalah {
+    width: 95px;
+    height: 65px;
+    margin-left: 10px;
+
+}
+
+.PepekNav {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+    list-style: none;
+    color: antiquewhite;
+}
+
+.PepekNav a {
+    color: rgb(124, 124, 124);
+    text-decoration: none;
+    background-color: rgba(246, 246, 246, 0.88);
+    padding: 10px 8px;
+    transition: all 0.5s ease;
+    border-radius: 8px;
+
+}
+
+.PepekNav a:hover {
+    color: #2d6a4f;
+    background-color: #d3ffea;
+    padding: 10px 8px;
+    border-radius: 8px;
+}
+
+.PepekNav li a b {
+    border-radius: 1px;
+
+}
+
+.Login {
+    list-style: none;
+    /* Kalau ada 2 tombol sekaligus (Profil + Logout),
+       buat sejajar supaya tidak bertumpuk & menabrak navbar */
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.Login a {
+    text-decoration: none;
+    color: rgb(62, 188, 255);
+    font-weight: 700;
+    background-color: rgb(208, 237, 241);
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: 0.4s;
+    display: inline-block;
+}
+
+.Login a:hover {
+    background-color: rgb(208, 237, 241);
+    transform: translateY(-2px);
+}
+
+.Devolopment {
+    color: #2d6a4f;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.Devolopment a {
+    background-color: #d9ffee;
+    padding: 8px;
+    border-radius: 10px;
+    font-size: x-small;
+}
+
+.eaderr a {
+    justify-content: center;
+    display: flex;
+    margin: 10px;
+    font-weight: 700;
+    font-size: 60px;
+    font-family: 'DM Serif Display', serif;
+    background-color: #ffffff;
+}
+
+.eadeer a {
+    justify-content: center;
+    display: flex;
+    margin-top: -15px;
+    color: #2d6a4f;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 60px;
+    font-family: 'DM Serif Display', serif;
+    background-color: #ffffff;
+
+}
+
+.DesMini {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 700;
+    color: rgb(55, 55, 55);
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+}
+
+.borderr {
+    border-bottom: black 1px solid;
+    padding: 30px;
+}
+
+.bag1 a {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 650;
+    color: rgb(73, 73, 73);
+    font-size: 15px;
+}
+
+.bag1 p {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 650;
+    font-size: 25px;
+    gap: 10px;
+}
+
+.bag1 {
+    padding-top: 40px;
+}
+
+.bag2 {
+    padding-top: 5px;
+}
+
+.bag2 a {
+    color: #54826d;
+    font-family: 'DM Serif Display', serif;
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.bagian2 {
+    display: flex;
+    justify-content: center;
+    gap: 70px;
+}
+
+.bag11 {
+    margin-top: 30px;
+    background-color: #f8f8f8;
+    border-radius: 20px;
+    width: 400px;
+    height: 200px;
+    padding-left: 8px;
+    padding-top: 6px;
+    transition: 0.4s;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06)
+}
+
+.bag11 a {
+    font-size: 10px;
+}
+
+.bag11:hover {
+    transform: translateY(-3px);
+}
+
+.ular {
+    padding-bottom: 10px;
+}
+
+.buton1 {
+    background-color: #d3ffea;
+    border-radius: 20px;
+    padding-left: 8px;
+    padding-bottom: 4px;
+    width: 90px;
+    height: 20px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.buton1 a {
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.bag22 {
+    margin-top: 30px;
+    background-color: #f8f8f8;
+    border-radius: 20px;
+    width: 400px;
+    height: 200px;
+    padding-left: 8px;
+    padding-top: 6px;
+    transition: 0.4s;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06)
+}
+
+.bag22 a {
+    font-size: 10px;
+}
+
+.bag22:hover {
+    transform: translateY(-3px);
+
+}
+
+.setel {
+    padding-bottom: 10px;
+}
+
+.buton2 {
+    background-color: #ffefd3;
+    border-radius: 20px;
+    padding-left: 8px;
+    padding-bottom: 4px;
+    width: 90px;
+    height: 20px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.buton2 a {
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.bag11 h2 {
+    padding-bottom: 8px;
+}
+
+.bag22 h2 {
+    padding-bottom: 8px;
+}
+
+.borderr2 {
+    border-bottom: black 1px solid;
+    padding: 30px;
+}
+
+.bag3 a {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 650;
+    color: rgb(73, 73, 73);
+    font-size: 15px;
+}
+
+.bag3 p {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 650;
+    font-size: 25px;
+    gap: 10px;
+}
+
+.bag3 {
+    padding-top: 40px;
+}
+
+.bag4 {
+    padding-top: 5px;
+}
+
+.bag4 a {
+    color: #54826d;
+    font-family: 'DM Serif Display', serif;
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.Library {
+    margin-top: 30px;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pygame {
+    width: 200px;
+    height: 140px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding-left: 8px;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06)
+}
+
+.pygame p {
+    font-size: 12px;
+}
+
+.pygame a {
+    font-size: 10px;
+
+}
+
+.pygame1 {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.pygame2 {
+    padding-left: 3px;
+}
+
+.unity {
+    width: 200px;
+    height: 140px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding-left: 8px;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06)
+}
+
+.unity p {
+    font-size: 12px;
+}
+
+.unity a {
+    font-size: 10px;
+
+}
+
+.unity1 {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.unity2 {
+    padding-left: 3px;
+}
+
+.pygame3 a {
+    font-size: 10px;
+    font-weight: 600;
+    color: #2d6a4f;
+    padding-left: 3px;
+
+
+}
+
+.pygame3 {
+    background-color: #93eac3;
+    width: 40px;
+    height: 20px;
+    border-radius: 5px;
+
+}
+
+.pygame4 a {
+    font-size: 10px;
+    font-weight: 600;
+    color: #a6a10d;
+    padding-left: 3px;
+
+
+}
+
+.pygame4 {
+    background-color: #d5d67c;
+    width: 60px;
+    height: 20px;
+    border-radius: 5px;
+
+}
+
+.pygame5 a {
+    font-size: 10px;
+    font-weight: 600;
+    color: #c02727;
+    padding-left: 3px;
+
+
+}
+
+.pygame5 {
+    background-color: #ec9c9c;
+    width: 40px;
+    height: 20px;
+    border-radius: 5px;
+
+}
+
+.Foter {
+    background-color: rgb(235, 235, 235);
+    height: 50px;
+    margin-top: 40px;
+
+}
+
+.Foter a {
+
+    padding-left: 450px;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+
+}
+
+
+
+/* Container Utama Kotak Login */
+.login-box {
+    max-width: 400px;
+    margin: 50px auto;
+    /* Membuatnya otomatis di tengah halaman */
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    /* Bayangan kanan-bawah yang halus */
+    box-shadow: 5px 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.login-box h2 {
+    font-family: 'DM Serif Display', serif;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.login-box p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+
+.input-group input {
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+
+.input-group input:focus {
+    border-color: #2d6a4f;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
+}
+
+/* Gaya Tombol Login */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.btn-login:hover {
+    background-color: #1b4332;
+    transform: translateY(-2px);
+}
+
+.loginn {
+    padding-top: 40px;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.login h2 span {
+    font-size: large;
+    font-family: 'Times New Roman', Times, serif;
+
+
+}
+
+.loginn span {
+    color: #2d6a4f;
+    font-size: 800;
+
+}
+
+.loginn a {
+    font-size: 13px;
+    font-weight: 700;
+    color: #373737;
+
+}
+
+
+center {
+    color: #2d6a4f;
+}
+
+
+
+
+.contakk {
+    background-color: 0;
+    margin-top: 70px;
+    border-radius: 10px;
+    max-width: 300px;
+    padding-left: 10px;
+    margin-left: 20px;
+
+
+
+}
+
+.cuntul {
+    background-color: 0;
+    margin-top: 70px;
+    border-radius: 10px;
+    max-width: 400px;
+    padding-left: 10px;
+    margin-left: 20px;
+    margin-bottom: -10;
+
+
+}
+
+.cuntul h4 {
+    font-weight: 300;
+    font-size: 12px;
+    color: #2d6a4f;
+}
+
+.contakk h2 {
+    font-family: 'DM Serif Display', serif;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.contakk h4 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 25px;
+
+}
+
+.contak1 {
+    padding-top: 20px;
+
+
+}
+
+.contak2 {
+    padding-top: 20px;
+
+}
+
+label {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 700;
+}
+
+.contak1,
+.contak2 label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.contak1 input {
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    /* Menghilangkan garis biru bawaan browser */
+    transition: all 0.3s ease;
+}
+
+.contak2 input {
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    /* Menghilangkan garis biru bawaan browser */
+    transition: all 0.3s ease;
+}
+
+.logokkk {
+    width: 110px;
+    height: 80px;
+    margin-top: -55px;
+}
+
+.hmm {
+    text-align: center;
+    font-size: 11px;
+
+}
+
+.hmm span {
+    color: #2d6a4f;
+    cursor: pointer;
+
+}
+
+.hmm a {
+    text-decoration: none;
+    color: black;
+
+}
+
+.btn-logink {
+    width: 75%;
+    padding: 12px;
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.btn-logink:hover {
+    background-color: #1b4332;
+    transform: translateY(-2px);
+}
+
+
+.table-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 30px auto;
+
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+
+thead {
+    background-color: #f7f5f0;
+    color: #7a7a7a;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+th,
+td {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+
+.bold {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+
+.badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.mudah {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+}
+
+.menengah {
+    background-color: #e8f0fe;
+    color: #1967d2;
+}
+
+.advanced {
+    background-color: #fef7e0;
+    color: #b05a00;
+}
+
+.foterrr1 {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.foterrr1 h2 {
+    font-weight: 800;
+    font-size: 30px;
+}
+
+.foterrr1 span {
+    color: #2d6a4f;
+}
+
+.foterrr1 p {
+    color: #2d6a4f;
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+
+}
+
+.portfolio-section {
+    padding: 60px 20px;
+    background-color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.portfolio-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px auto;
+}
+
+.portfolio-header h2 {
+    font-size: 36px;
+    color: #1a252f;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.portfolio-header p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+}
+
+
+.project-container {
+    max-width: 900px;
+    margin: 0 auto 50px auto;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-top: 5px solid #3498db;
+}
+
+/* Bagian Judul dan Deskripsi dalam 1 Proyek */
+.project-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.project-title h3 {
+    font-size: 26px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.project-title p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Bagian Cabang / Fitur (Flexbox) */
+.project-branches {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* Otomatis numpuk di HP */
+}
+
+/* Kotak informasi kecil di dalam proyek */
+.branch-card {
+    background: #fdfdfd;
+    flex: 1 1 300px;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.branch-card:hover {
+    background: #3498db;
+    color: #ffffff;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+}
+
+.branch-card h4 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: inherit;
+    /* Warna mengikuti hover */
+}
+
+.branch-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: inherit;
+}
+
+
+@media (max-width: 768px) {
+    .project-container {
+        padding: 25px;
+        margin-bottom: 50px;
+    }
+}
+
+.borderrrr {
+    border-bottom: black 1px solid;
+    margin-top: -50px;
+}
+
+@media (max-width: 768px) {
+
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 95%;
+    }
+
+    nav {
+        padding: 10px 4%;
+    }
+
+    .Pepek {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    .PepekNav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .Login {
+        margin-top: 10px;
+    }
+
+    .eaderr a,
+    .eadeer a {
+        font-size: 35px;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    .DesMini {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .bagian2 {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .bag11,
+    .bag22 {
+        width: 95%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .Library {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pygame,
+    .unity {
+        width: 95%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .anonim {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    .login-box {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .contakk,
+    .cuntul {
+        max-width: 95%;
+        margin: 30px auto;
+        padding: 15px;
+    }
+
+    .btn-logink,
+    .btn-login {
+        width: 100%;
+    }
+
+    .Foter {
+        height: auto;
+        padding: 15px;
+    }
+
+    .Foter a {
+        padding-left: 0;
+        justify-content: center;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .portfolio-header h2 {
+        font-size: 28px;
+    }
+
+    .portfolio-header p {
+        font-size: 15px;
+    }
+
+    .project-container {
+        padding: 20px;
+    }
+
+    .project-title h3 {
+        font-size: 22px;
+    }
+
+    .branch-card {
+        width: 100%;
+    }
+}
+
+.anonim {
+    z-index: -1;
+    position: absolute;
+    width: 1000px;
+    height: 700;
+
+}
+
+/* Container Utama */
+.contact-section {
+    padding: 60px 20px;
+    background-color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Header Contact Us */
+.contact-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 50px auto;
+}
+
+.contact-header h2 {
+    font-size: 36px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.contact-header p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+
+.contact-wrapper {
+    display: flex;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #f9f9f9;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    /* Agar sudut melengkung tetap rapi */
+}
+
+
+.contact-info {
+    flex: 1;
+    background: #2c3e50;
+    color: #ffffff;
+    padding: 40px;
+}
+
+.contact-info h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.contact-info>p {
+    margin-bottom: 30px;
+    color: #bdc3c7;
+    line-height: 1.5;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-item .icon {
+    font-size: 24px;
+}
+
+.info-item p {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* --- BAGIAN KANAN: Form Pesan --- */
+.contact-form {
+    flex: 1.5;
+    /* Form mengambil ruang sedikit lebih besar */
+    padding: 40px;
+    background: #ffffff;
+}
+
+.contact-form h3 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+
+.input-group input:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #2980b9;
+}
+
+
+@media (max-width: 768px) {
+    .contact-wrapper {
+        flex-direction: column;
+    }
+
+    .contact-info,
+    .contact-form {
+        padding: 30px;
+    }
+}
+
+.havid22 {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   
+
+}
+
+.dheskripsiVlog {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+}
+.dheskripsiVlog p {
+    font-weight: 300px;
+    font-size: 15px;
+
+    }
+
+
+/* ==========================================================
+   BAGIAN BARU: Dashboard Admin, Dashboard User, Katalog,
+   Keranjang/Checkout, dan Footer abu-abu gelap
+   ========================================================== */
+
+/* ---------- Wadah isi halaman dashboard ---------- */
+.bungkus {
+    max-width: 1100px;
+    margin: auto;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+/* ---------- Kepala halaman ---------- */
+.kepala {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.kepala h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: #333;
+    margin-top: 6px;
+}
+
+.kepala p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.lencana {
+    display: inline-block;
+    background-color: #d3ffea;
+    color: #2d6a4f;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.judul-bagian {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: #333;
+    margin-top: 35px;
+    margin-bottom: 12px;
+}
+
+/* ---------- Kartu statistik ---------- */
+.kartu-statistik {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+.kartu {
+    flex: 1 1 200px;
+    background-color: #f8f8f8;
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06);
+    transition: 0.4s;
+}
+
+.kartu:hover {
+    transform: translateY(-3px);
+}
+
+.kartu h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #7a7a7a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.kartu .angka {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2d6a4f;
+    margin-top: 6px;
+}
+
+/* ---------- Tabel pesanan ---------- */
+.aksi {
+    white-space: nowrap;
+}
+
+.baris-detail {
+    background-color: #fbfbfb;
+}
+
+.baris-detail p {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.daftar-item {
+    list-style: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.daftar-item li {
+    font-size: 13px;
+    color: #333;
+    padding: 3px 0;
+    border-bottom: 1px dashed #e5e5e5;
+}
+
+.daftar-item li span {
+    color: #2d6a4f;
+    font-weight: 600;
+}
+
+.lihat-semua {
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.lihat-semua a {
+    color: #2d6a4f;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.lihat-semua a:hover {
+    text-decoration: underline;
+}
+
+.kotak-kosong {
+    background-color: #f8f8f8;
+    border-radius: 14px;
+    padding: 30px;
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+}
+
+.kotak-kosong a {
+    color: #2d6a4f;
+    font-weight: 700;
+}
+
+.notif {
+    background-color: #d3ffea;
+    color: #1b4332;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 18px;
+}
+
+/* Notifikasi error (merah) */
+.notif.error {
+    background-color: #ffdcdc;
+    color: #b03030;
+}
+
+/* ---------- Form admin ---------- */
+.kartu-form {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 26px;
+    box-shadow: 5px 8px 24px rgba(0, 0, 0, 0.05);
+    margin-top: 22px;
+}
+
+.kartu-form h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.input-group textarea,
+.input-group select {
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.input-group textarea:focus,
+.input-group select:focus {
+    border-color: #2d6a4f;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
+}
+
+.baris-form {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.baris-form .input-group {
+    flex: 1 1 180px;
+}
+
+.btn-batal,
+.btn-kecil {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-batal {
+    background-color: #eeeeee;
+    color: #555;
+    margin-left: 8px;
+}
+
+.btn-batal:hover {
+    background-color: #dddddd;
+}
+
+.btn-kecil {
+    background-color: #2d6a4f;
+    color: #ffffff;
+}
+
+.btn-kecil:hover {
+    background-color: #1b4332;
+}
+
+.form-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.form-status label {
+    font-size: 12px;
+    color: #666;
+}
+
+.form-status select {
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+}
+
+.form-status .btn-kecil {
+    margin-top: 0;
+    padding: 8px 14px;
+}
+
+.tombol-edit,
+.tombol-hapus {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.tombol-edit {
+    background-color: #d3ffea;
+    color: #2d6a4f;
+}
+
+.tombol-edit:hover {
+    background-color: #a9f0d1;
+}
+
+.tombol-hapus {
+    background-color: #ffdcdc;
+    color: #b03030;
+    margin-left: 6px;
+}
+
+.tombol-hapus:hover {
+    background-color: #ffbdbd;
+}
+
+/* ---------- NAVBAR #2 : Navbar Admin ---------- */
+.nav-admin {
+    background-color: #1b4332;
+}
+
+.nav-admin .logo {
+    color: #ffffff;
+}
+
+.nav-admin .logo span {
+    color: #9be7c4;
+}
+
+.nav-admin .PepekNav a {
+    color: #b7d3c4;
+    background-color: transparent;
+}
+
+.nav-admin .PepekNav a:hover {
+    color: #ffffff;
+    background-color: #2d6a4f;
+}
+
+.nav-admin .Login a {
+    color: #1b4332;
+    background-color: #9be7c4;
+}
+
+.nav-admin .Login a:hover {
+    background-color: #ffffff;
+}
+
+/* ---------- Katalog ---------- */
+.katalog-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.katalog-head h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: #333;
+}
+
+.katalog-head p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.tombol-keranjang {
+    display: inline-block;
+    background-color: #2d6a4f;
+    color: #ffffff;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.4s;
+}
+
+.tombol-keranjang:hover {
+    background-color: #1b4332;
+    transform: translateY(-2px);
+}
+
+.tombol-keranjang span {
+    background-color: #9be7c4;
+    color: #1b4332;
+    border-radius: 10px;
+    padding: 2px 8px;
+    margin-left: 6px;
+    font-size: 12px;
+}
+
+.form-cari {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+.form-cari input {
+    flex: 1 1 220px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+}
+
+.form-cari select {
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* ---------- Baris tombol kategori ---------- */
+.kategori-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.tombol-kategori {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    color: #444;
+    border: 1px solid #d5d5d5;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tombol-kategori:hover {
+    background-color: #d3ffea;
+    color: #1b4332;
+    border-color: #93eac3;
+}
+
+.tombol-kategori.aktif {
+    background-color: #2d6a4f;
+    color: #ffffff;
+    border-color: #2d6a4f;
+}
+
+/* ---------- Halaman Detail Produk ---------- */
+.detail-grid {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    background-color: #f8f8f8;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.detail-ikon {
+    font-size: 90px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 160px;
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+}
+
+.detail-info {
+    flex: 2 1 320px;
+}
+
+.detail-info h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.detail-kategori {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.detail-harga {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2d6a4f;
+    margin-bottom: 6px;
+}
+
+.detail-stok {
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.detail-aksi {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Halaman Cara Beli ---------- */
+.langkah-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.langkah {
+    flex: 1 1 280px;
+    background-color: #f8f8f8;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06);
+    transition: 0.4s;
+}
+
+.langkah:hover {
+    transform: translateY(-3px);
+}
+
+.langkah-nomor {
+    width: 44px;
+    height: 44px;
+    background-color: #2d6a4f;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.langkah h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.langkah p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #666;
+}
+
+.langkah a {
+    color: #2d6a4f;
+    font-weight: 600;
+}
+
+/* ---------- Badge notifikasi admin ---------- */
+.lencana-notif {
+    background-color: #e74c3c;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+/* ---------- Baris tabel yang bisa diklik ---------- */
+.baris-bisa-klik:hover {
+    background-color: #f2fbf6;
+}
+
+.baris-detail-isi td {
+    background-color: #fbfbfb;
+}
+
+.grid-produk {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.kartu-produk {
+    flex: 1 1 250px;
+    max-width: 300px;
+    background-color: #f8f8f8;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.06);
+    transition: 0.4s;
+    display: flex;
+    flex-direction: column;
+}
+
+.kartu-produk:hover {
+    transform: translateY(-3px);
+}
+
+.ikon-produk {
+    font-size: 34px;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.kartu-produk h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.kartu-produk .bahasa {
+    font-size: 12px;
+    color: #54826d;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.kartu-produk .deskripsi {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.kartu-produk .harga {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d6a4f;
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+.kaki-produk {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn-beli {
+    display: inline-block;
+    background-color: #2d6a4f;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-beli:hover {
+    background-color: #1b4332;
+}
+
+.btn-beli.sudah {
+    background-color: #93eac3;
+}
+
+.habis {
+    font-size: 12px;
+    color: #c02727;
+    font-weight: 600;
+}
+
+.cekout-cepat {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f2fbf6;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.cekout-cepat p {
+    font-size: 14px;
+    color: #444;
+}
+
+/* ---------- FOOTER (lengkap, abu-abu lebih gelap) ---------- */
+.footer {
+    background-color: #333333;
+    color: #e0e0e0;
+    margin-top: 50px;
+    padding: 40px 6% 0 6%;
+}
+
+.footer-isi {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.footer-kolom {
+    flex: 1 1 200px;
+}
+
+.footer-kolom .logo {
+    font-size: 20px;
+    color: #ffffff;
+    padding-left: 0;
+    margin-bottom: 12px;
+}
+
+.footer-kolom .logo span {
+    color: #9be7c4;
+}
+
+.footer-kolom h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: #ffffff;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.footer-kolom p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #bfbfbf;
+}
+
+.footer-kolom a {
+    display: block;
+    font-size: 13px;
+    color: #bfbfbf;
+    text-decoration: none;
+    padding: 4px 0;
+    transition: 0.3s;
+}
+
+.footer-kolom a:hover {
+    color: #9be7c4;
+    padding-left: 4px;
+}
+
+.footer-bawah {
+    max-width: 1100px;
+    margin: 30px auto 0 auto;
+    border-top: 1px solid #555555;
+    padding: 16px 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #aaaaaa;
+}
+
+@media (max-width: 768px) {
+
+    .footer-isi {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .footer-kolom {
+        flex: 1 1 auto;
+    }
+
+    .grid-produk {
+        justify-content: center;
+    }
+
+    .kartu-produk {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
